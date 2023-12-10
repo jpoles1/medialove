@@ -11,9 +11,6 @@
 
 </script>
 
-Media Type: {media_type}
-ID: {id}
-
 {#if media_type == "tv"}
 <Tv id={id} {media_data} />
 {:else if media_type == "movie"}
