@@ -10,7 +10,7 @@ services:
       - ./pb/pb_migrations:/usr/local/bin/pb_migrations
   web:
     build: ./frontend
-    entrypoint: npm run serve
+    entrypoint: bun run build && bun run preview
     restart: always
     ports:
-      - 7070:5763
+      - 7070:4173
