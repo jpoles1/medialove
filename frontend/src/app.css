@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    h1 {
+      @apply text-2xl;
+      font-weight: bold;
+    }
+    h2 {
+      @apply text-xl;
+      font-weight: bold;
+    }
+    h3 {
+      @apply text-lg;
+      font-weight: bold;
+    }
+    h4 {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+    ol {
+      @apply list-decimal;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+      padding-inline-start: 30px;  
+    }
+    ul {
+      @apply list-outside;
+      @apply list-disc;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+      padding-inline-start: 30px;  
+    }
+    hr {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
+}
+

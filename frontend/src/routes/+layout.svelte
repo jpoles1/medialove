@@ -1,13 +1,9 @@
 <script>
+  import '../app.css';
+
 	import { AppBar, AppLayout } from "svelte-ux";
 	import Header from "./Header.svelte";
 </script>
-
-<style lang="postcss">
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
-</style>
 
 <AppLayout>
     <nav slot="nav" class="h-full bg-content text-contenttext">
