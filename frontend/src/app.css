@@ -40,5 +40,22 @@
       margin-top: 0.5em;
       margin-bottom: 0.5em;
     }
+    nav .NavItem {
+      border-left-width: 4px;
+      border-color: transparent;
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+      padding-left: 1.25rem;
+      font-size: .875rem;
+      line-height: 1.25rem;
+      --tw-text-opacity: 1;
+    }
+    nav .NavItem.is-active {
+      --tw-border-opacity: 1;
+      border-color: rgb(59 130 246 / var(--tw-border-opacity));
+      background-color: #41454d;
+      --tw-text-opacity: 1;
+      color: rgb(219 234 254 / var(--tw-text-opacity));
+    }
 }
 
