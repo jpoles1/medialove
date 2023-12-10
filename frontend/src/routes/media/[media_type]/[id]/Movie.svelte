@@ -4,6 +4,8 @@
 
     export let id;
     export let media_data: any;
+    export let view_data = [];
+    
     let movie_data = media_data.movie_data as MovieDetails
 
     let show_synopsis = false;
