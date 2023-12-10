@@ -5,7 +5,8 @@
   import { page } from '$app/stores';
 	import Header from "./Header.svelte";
 	import { uaccount } from '$lib/pocketbase';
-</script>
+  import { SvelteToast } from '@zerodevx/svelte-toast'
+  </script>
 
 <AppLayout>
   <nav slot="nav" class="h-full bg-content text-contenttext">
@@ -28,5 +29,40 @@
   </AppBar>
   <main class="text-contenttext p-2">
     <slot />
+    <SvelteToast options={{classes: ["toaster"], duration: 2000  }} />
   </main>
 </AppLayout>
+
+
+<style lang="postcss">
+  :root {
+    --toastContainerTop: auto;
+    --toastContainerRight: auto;
+    --toastContainerBottom: 0;
+    --toastContainerLeft: calc(50vw - 8rem);
+  }
+  :global(.toaster.success) {
+    --toastColor: hsl(var(--suc));
+    --toastBackground: hsl(var(--su));
+    --toastBarBackground: hsl(var(--suc));
+    font-weight: bold;
+  }
+  :global(.toaster.info) {
+    --toastColor: hsl(var(--inc));
+    --toastBackground: hsl(var(--in));
+    --toastBarBackground: hsl(var(--inc));
+    font-weight: bold;
+  }
+  :global(.toaster.warn) {
+    --toastColor: hsl(var(--wac));
+    --toastBackground: hsl(var(--wa));
+    --toastBarBackground: hsl(var(--wac));
+    font-weight: bold;
+  }
+  :global(.toaster.error) {
+    ---toastColor: #bbb;
+    --toastBackground: IndianRed;
+    --toastBarBackground: #bbb;
+    font-weight: bold;
+  }
+  </style>
