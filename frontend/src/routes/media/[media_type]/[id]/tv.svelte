@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Tab, Tabs } from "svelte-ux";
+	import { Button, Switch, Tab, Tabs } from "svelte-ux";
 	import type { SeasonDetails, TvShowDetails } from "tmdb-ts";
 
     export let id;
@@ -23,7 +23,10 @@
 
     <img src="https://image.tmdb.org/t/p/w200/{series_data.poster_path}" onerror="this.onerror=null;this.src='/placeholder.png';" class="mt-2 rounded-lg"/>
     
-    <p><b>Overview:</b> {series_data.overview}</p>
+    <p class="my-2">
+        <b>Overview:</b>
+        {series_data.overview}
+    </p>
     
     <div>
         <Tabs>
@@ -41,6 +44,10 @@
                         <svelte:fragment slot="content">
                             <div class="border-gray-200 border-2 rounded-b p-4 h-full">
                                 <h1>Episode #{active_episode+1} - {active_episode_data.name}</h1>
+                                <label class="flex gap-2 items-center text-sm">
+                                    <Switch />
+                                    Watched
+                                </label>
                                 <hr>
                                 Air Date: {active_episode_data.air_date} | Runtime: {active_episode_data.runtime} min
                                 <br>
@@ -50,7 +57,8 @@
                                 <b>Overview:</b>
                                 <div>
                                     {#if show_synopsis}
-                                        {active_episode_data.overview}
+                                        <!-- Warning: Not sanitized -->
+                                        {@html active_episode_data.overview.replaceAll("\n\n", "<br>").replaceAll("\n", "<br>")}
                                     {:else}
                                         <Button size="sm" variant="fill-outline" on:click={() => show_synopsis=true}>Show Synopsis (Spoiler Warning)</Button>
                                     {/if}
@@ -63,8 +71,4 @@
         </Tabs>
           
     </div>
-
-    <hr class="my-4">
-
-    {JSON.stringify(media_data)}
 </div>
