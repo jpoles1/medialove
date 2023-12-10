@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Tv from './tv.svelte';
-    import Movie from './movie.svelte';
+	import Tv from './Tv.svelte';
+    import Movie from './Movie.svelte';
+	import Book from './Book.svelte';
 
     export let data;
     let media_type = data.media_type;
@@ -15,9 +16,8 @@ ID: {id}
 
 {#if media_type == "tv"}
 <Tv id={id} {media_data} />
-
 {:else if media_type == "movie"}
 <Movie id={id} {media_data} />
 {:else if media_type == "book"}
-
+<Book id={id} {media_data} />
 {/if}

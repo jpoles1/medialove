@@ -21,6 +21,12 @@
 
     <p class="my-2">
         <b>Overview:</b>
-        {movie_data.overview}
+        <br>
+        {#if show_synopsis}
+            <!-- Warning: Not sanitized -->
+            {@html movie_data.overview.replaceAll("\n\n", "<br>").replaceAll("\n", "<br>")}
+        {:else}
+            <Button size="sm" variant="fill-outline" on:click={() => show_synopsis=true}>Show Synopsis (Spoiler Warning)</Button>
+        {/if}
     </p>
 </div>

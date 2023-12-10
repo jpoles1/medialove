@@ -2,11 +2,12 @@
     import { NumberStepper, SelectField, TextField } from 'svelte-ux';
     import { onMount } from 'svelte';
 	import { debounce } from '$lib/debounce';
-    //let search_term = "children of time";
-    //let search_media_type = "book";
+    
+    let search_term = "children of time";
+    let search_media_type = "book";
 
-    let search_term = "scavengers reign";
-    let search_media_type = "tv";
+    //let search_term = "scavengers reign";
+    //let search_media_type = "tv";
 
     let page = 1;
     let max_pages = 1;
@@ -71,7 +72,7 @@
 <div class="flex flex-row flex-wrap items-stretch justify-around space-x-2 space-y-2">
     {#each Object.entries(search_result.docs) as [key, value]}
         <div class="p-2 rounded shadow-md">
-            <a href={value.url} class="w-[200px] flex justify-center items-center flex-col text-center">
+            <a href="/media/{search_media_type}/{value.key.replace("/works/", "")}" class="w-[200px] flex justify-center items-center flex-col text-center">
                 <div class="w-[200px]">
                     {#if value.cover_edition_key}
                         <img src="https://covers.openlibrary.org/a/id/{value.cover_i}-L.jpg?default=false" onerror="this.onerror=null;this.src='/placeholder.png';"/>
