@@ -40,7 +40,7 @@
     <h1>{movie_data.title}</h1>
 
     <img src="https://image.tmdb.org/t/p/w200/{movie_data.poster_path}" onerror="this.onerror=null;this.src='/placeholder.png';" class="mt-2 rounded-lg"/>
-    {JSON.stringify(view_data)}
+
     <label class="flex gap-2 items-center text-sm my-2">
         <Switch checked={view_data && view_data[0] ? view_data[0].viewed : false} on:change={(e) => {view_update_debounce(e.target.checked)}} />
         Watched

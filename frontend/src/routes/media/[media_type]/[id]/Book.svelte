@@ -36,7 +36,6 @@
 </script>
 
 <div class="p-2">
-    {JSON.stringify(view_data)}
     <h1>{book_data.title}</h1>
     <div class="w-[200px]">
         {#if book_data && book_data.covers && book_data.covers[0]}

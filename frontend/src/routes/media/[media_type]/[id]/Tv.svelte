@@ -1,9 +1,50 @@
 <script lang="ts">
+	import { debounce } from "$lib/debounce";
+	import { pb, uaccount, type ViewData } from "$lib/pocketbase";
+	import { toast } from "@zerodevx/svelte-toast";
 	import { Button, Switch, Tab, Tabs } from "svelte-ux";
 	import type { SeasonDetails, TvShowDetails } from "tmdb-ts";
 
-    export let id;
+    export let id: string;
     export let media_data: any;
+    export let view_data: ViewData[];
+
+    /**
+     * Looks up the ID of a TV episode based on the season and episode numbers.
+     * @param {number} season - The season number.
+     * @param {number} episode - The episode number.
+     * @returns {[number, string | undefined]} - An array containing the index of the view entry and the ID of the episode (if found).
+     */
+    function view_id_lookup(season: number, episode: number): [number, string | undefined] {
+        const view_index = view_data.findIndex((v) => v.season == season && v.episode == episode);
+        const view_entry = view_data[view_index];
+        return [view_index, view_entry ? view_entry.id || undefined : undefined];
+    }
+
+    async function view_update(season: number, episode: number, viewed: boolean) {
+        if (!$uaccount) {
+            toast.push("You must be logged in to track viewing history", { classes: ["error"] })
+            return
+        }
+        let [view_index, view_id] = view_id_lookup(season, episode);
+        if (view_data.length == 0 || !view_id) {
+            const new_view = { mid: id, media_type: "tv", season, episode, viewed, uid: $uaccount.id } as ViewData
+            const view_record = await pb.collection("viewlist").create(new_view).catch((e) => {
+                console.error(e)
+                toast.push(`Error creating view record: ${e}`, { classes: ["error"] })
+            }) as ViewData | undefined
+            if (view_record) view_data.push(view_record)
+        } else {
+            view_data[view_index].viewed = viewed
+            pb.collection("viewlist").update(view_id, { viewed }).catch((e) => {
+                console.error(e)
+                toast.push(`Error updating view record: ${e}`, { classes: ["error"] })
+            })
+        }
+    }
+
+    const view_update_debounce = debounce(view_update, 500, 500)
+
     let series_data = media_data.series_data as TvShowDetails
     let season_data = media_data.season_data as SeasonDetails[]
 
@@ -23,6 +64,11 @@
 
     <img src="https://image.tmdb.org/t/p/w200/{series_data.poster_path}" onerror="this.onerror=null;this.src='/placeholder.png';" class="mt-2 rounded-lg"/>
     
+    <label class="flex gap-2 items-center text-sm my-2">
+        <Switch checked={view_data && view_data[0] ? view_data[0].viewed : false} on:change={(e) => {view_update_debounce(-1, -1, e.target.checked)}} />
+        Watched
+    </label>
+
     <p class="my-2">
         <b>Overview:</b>
         {series_data.overview}
@@ -44,8 +90,8 @@
                         <svelte:fragment slot="content">
                             <div class="border-gray-200 border-2 rounded-b p-4 h-full">
                                 <h1>Episode #{active_episode+1} - {active_episode_data.name}</h1>
-                                <label class="flex gap-2 items-center text-sm">
-                                    <Switch />
+                                <label class="flex gap-2 items-center text-sm my-2">
+                                    <Switch checked={view_data && view_data[view_id_lookup(active_season+1, active_episode+1)[0]] ? view_data[view_id_lookup(active_season+1, active_episode+1)[0]].viewed : false} on:change={(e) => {view_update_debounce(active_season+1, active_episode+1, e.target.checked)}} />
                                     Watched
                                 </label>
                                 <hr>
