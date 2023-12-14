@@ -40,7 +40,7 @@
 <h1>Media Search</h1>
 
 <div class="flex flex-row space-x-2 bg-wh">
-    <SelectField label="Media Type" options={media_types} bind:value={search_media_type} on:change={debounce_media_search} />
+    <SelectField label="Media Type" options={media_types} bind:value={search_media_type} on:change={media_search} />
     <TextField label="Search" class="flex-grow" bind:value={search_term} on:change={debounce_media_search}/>
 </div>
 

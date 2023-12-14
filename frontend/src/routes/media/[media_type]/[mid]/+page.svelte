@@ -8,13 +8,14 @@
 
     export let data;
     let media_type = data.media_type;
-    let id = data.id;
+    let mid = data.mid;
+    let mdbid = data.mdbid; 
     let media_data = data.media_data;
     let view_data: ViewData[];
     
     onMount(() => {
         console.log(media_type)
-        pb.collection("viewlist").getFullList({filter: `media_type="${media_type}" && mid="${id}"` }).then((list) => {
+        pb.collection("viewing").getFullList({expand: "media", filter: `media="${mdbid}"` }).then((list) => {
             view_data = list as any
         }).catch((e) => {
             console.error(e)
@@ -24,9 +25,9 @@
 </script>
 
 {#if media_type == "tv"}
-<Tv {id} {media_data} {view_data} />
+<Tv {mid} {mdbid} {media_data} {view_data} />
 {:else if media_type == "movie"}
-<Movie {id} {media_data} {view_data} />
+<Movie {mid} {mdbid} {media_data} {view_data} />
 {:else if media_type == "book"}
-<Book {id} {media_data} {view_data} />
+<Book {mid}  {mdbid} {media_data} {view_data} />
 {/if}

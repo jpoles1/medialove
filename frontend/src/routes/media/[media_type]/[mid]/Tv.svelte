@@ -5,7 +5,8 @@
 	import { Button, Switch, Tab, Tabs } from "svelte-ux";
 	import type { SeasonDetails, TvShowDetails } from "tmdb-ts";
 
-    export let id: string;
+    export let mid: string;
+    export let mdbid: string;
     export let media_data: any;
     export let view_data: ViewData[];
 
@@ -28,15 +29,15 @@
         }
         let [view_index, view_id] = view_id_lookup(season, episode);
         if (view_data.length == 0 || !view_id) {
-            const new_view = { mid: id, media_type: "tv", season, episode, viewed, uid: $uaccount.id } as ViewData
-            const view_record = await pb.collection("viewlist").create(new_view).catch((e) => {
+            const new_view = { media: mdbid, season, episode, viewed, uid: $uaccount.id } as ViewData
+            const view_record = await pb.collection("viewing").create(new_view).catch((e) => {
                 console.error(e)
                 toast.push(`Error creating view record: ${e}`, { classes: ["error"] })
             }) as ViewData | undefined
             if (view_record) view_data.push(view_record)
         } else {
             view_data[view_index].viewed = viewed
-            pb.collection("viewlist").update(view_id, { viewed }).catch((e) => {
+            pb.collection("viewing").update(view_id, { viewed }).catch((e) => {
                 console.error(e)
                 toast.push(`Error updating view record: ${e}`, { classes: ["error"] })
             })

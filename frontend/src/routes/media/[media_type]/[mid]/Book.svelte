@@ -4,7 +4,8 @@
 	import { toast } from "@zerodevx/svelte-toast";
 	import { Button, NumberStepper, Switch, Tab, Tabs } from "svelte-ux";
 
-    export let id: string;
+    export let mid: string;
+    export let mdbid: string;
     export let media_data: any;
     export let view_data: ViewData[];
 
@@ -14,8 +15,8 @@
             return
         }
         if (view_data.length == 0) {
-            const new_view = { mid: id, media_type: "book", viewed, page, uid: $uaccount.id } as ViewData
-            const view_record = await pb.collection("viewlist").create(new_view).catch((e) => {
+            const new_view = { media: mdbid, viewed, page, uid: $uaccount.id } as ViewData
+            const view_record = await pb.collection("viewing").create(new_view).catch((e) => {
                 console.error(e)
                 toast.push(`Error creating view record: ${e}`, { classes: ["error"] })
             }) as ViewData | undefined
@@ -23,7 +24,7 @@
         } else {
             view_data[0].viewed = viewed
             view_data[0].page = page
-            pb.collection("viewlist").update(view_data[0].id!, { viewed, page }).catch((e) => {
+            pb.collection("viewing").update(view_data[0].id!, { viewed, page }).catch((e) => {
                 console.error(e)
                 toast.push(`Error updating view record: ${e}`, { classes: ["error"] })
             })
