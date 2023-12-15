@@ -16,7 +16,7 @@
      * @param {number} episode - The episode number.
      * @returns {[number, string | undefined]} - An array containing the index of the view entry and the ID of the episode (if found).
      */
-    function view_id_lookup(season: number, episode: number): [number, string | undefined] {
+    $: view_id_lookup = (season: number, episode: number): [number, string | undefined] => {
         const view_index = view_data.findIndex((v) => v.season == season && v.episode == episode);
         const view_entry = view_data[view_index];
         return [view_index, view_entry ? view_entry.id || undefined : undefined];
@@ -34,7 +34,7 @@
                 console.error(e)
                 toast.push(`Error creating view record: ${e}`, { classes: ["error"] })
             }) as ViewData | undefined
-            if (view_record) view_data.push(view_record)
+            if (view_record) view_data = [...view_data, view_record]
         } else {
             view_data[view_index].viewed = viewed
             pb.collection("viewing").update(view_id, { viewed }).catch((e) => {
@@ -44,7 +44,7 @@
         }
     }
 
-    const view_update_debounce = debounce(view_update, 500, 500)
+    const view_update_debounce = debounce(view_update, 150, 150)
 
     let series_data = media_data.series_data as TvShowDetails
     let season_data = media_data.season_data as SeasonDetails[]
@@ -56,6 +56,8 @@
     let show_synopsis = false;
 
     $: active_episode_data = season_data[active_season].episodes[active_episode]
+    $: ep_viewed = (season: number, episode: number) => view_data && view_data[view_id_lookup(season, episode)[0]] ? view_data[view_id_lookup(season, episode)[0]].viewed : false
+    $: active_ep_viewed = view_data && view_data[view_id_lookup(active_season+1, active_episode+1)[0]] ? view_data[view_id_lookup(active_season+1, active_episode+1)[0]].viewed : false
 </script>
 
 <svelte:window bind:innerWidth />
@@ -66,7 +68,7 @@
     <img src="https://image.tmdb.org/t/p/w200/{series_data.poster_path}" onerror="this.onerror=null;this.src='/placeholder.png';" class="mt-2 rounded-lg"/>
     
     <label class="flex gap-2 items-center text-sm my-2">
-        <Switch checked={view_data && view_data[0] ? view_data[0].viewed : false} on:change={(e) => {view_update_debounce(-1, -1, e.target.checked)}} />
+        <Switch checked={ep_viewed(-1, -1)} on:change={(e) => {view_update_debounce(-1, -1, e.target.checked)}} />
         Watched
     </label>
 
@@ -85,14 +87,14 @@
                 <div class="border-gray-200 border-2 rounded-b p-4">
                     <Tabs placement={innerWidth > 400 ? "left" : "top"}>
                         {#each season_data[active_season].episodes as episode, i}
-                            <Tab on:click={() => {active_episode = i; show_synopsis=false}} selected={active_episode === i}>Episode {i+1}</Tab>
+                            <Tab on:click={() => {active_episode = i; show_synopsis=false}} selected={active_episode === i} class="{ep_viewed(active_season+1, i+1) ? "bg-green-400" : ""}">Episode {i+1}</Tab>
                         {/each}
                         
                         <svelte:fragment slot="content">
                             <div class="border-gray-200 border-2 rounded-b p-4 h-full">
                                 <h1>Episode #{active_episode+1} - {active_episode_data.name}</h1>
                                 <label class="flex gap-2 items-center text-sm my-2">
-                                    <Switch checked={view_data && view_data[view_id_lookup(active_season+1, active_episode+1)[0]] ? view_data[view_id_lookup(active_season+1, active_episode+1)[0]].viewed : false} on:change={(e) => {view_update_debounce(active_season+1, active_episode+1, e.target.checked)}} />
+                                    <Switch checked={active_ep_viewed} on:change={(e) => {view_update_debounce(active_season+1, active_episode+1, e.target.checked)}} />
                                     Watched
                                 </label>
                                 <hr>
