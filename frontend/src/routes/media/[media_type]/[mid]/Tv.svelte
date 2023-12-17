@@ -57,6 +57,11 @@
 
     $: active_episode_data = season_data[active_season].episodes[active_episode]
     $: ep_viewed = (season: number, episode: number) => view_data && view_data[view_id_lookup(season, episode)[0]] ? view_data[view_id_lookup(season, episode)[0]].viewed : false
+    $: season_viewed_color = (season: number): string => {
+        if (!view_data) return ""
+        const season_viewed_count = view_data.filter((v) => v.season == season && v.viewed).length
+        return season_viewed_count == 0 ? "" : (season_viewed_count == season_data[season-1].episodes.length ? "bg-green-400" : "bg-yellow-400")
+    }
     $: active_ep_viewed = view_data && view_data[view_id_lookup(active_season+1, active_episode+1)[0]] ? view_data[view_id_lookup(active_season+1, active_episode+1)[0]].viewed : false
 </script>
 
@@ -80,7 +85,7 @@
     <div>
         <Tabs>
             {#each season_data as season, i}
-              <Tab on:click={() => {active_season = i; active_episode=0; show_synopsis=false}} selected={active_season === i}>{season.name}</Tab>
+              <Tab on:click={() => {active_season = i; active_episode=0; show_synopsis=false}} selected={active_season === i} class={season_viewed_color(i+1)}>{season.name}</Tab>
             {/each}
           
             <svelte:fragment slot="content">
