@@ -28,3 +28,22 @@ export interface ViewData {
     created?: Date,
     updated?: Date,
 }
+
+export interface MediaList {
+    id?: string,
+    name: string,
+    creator: string,
+    editors: string[],
+    viewers: string[],
+    public: boolean,
+    created?: Date,
+    updated?: Date,
+}
+
+export interface MediaListEntry {
+    id?: string,
+    media: string | MediaData,
+    list: string | MediaList,
+    created?: Date,
+    updated?: Date,
+}
