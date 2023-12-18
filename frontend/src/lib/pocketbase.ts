@@ -5,8 +5,23 @@ import { writable } from 'svelte/store'
 export const pb = new PocketBase(PUBLIC_POCKETBASE_URL)
 export const uaccount = writable(pb.authStore.model)
 
+export type UserID = string
+export type MediaID = string
+export type MediaListID = string
+export type ViewID = string
+
+export interface UserData {
+    id?: UserID,
+    username: string,
+    email: string,
+    name: string,
+    avatar: string,
+    created?: Date,
+    updated?: Date,
+}
+
 export interface MediaData {
-    id?: string,
+    id?: MediaID,
     mid: string,
     media_type: string,
     title: string,
@@ -18,9 +33,9 @@ export interface MediaData {
 }
 
 export interface ViewData {
-    id?: string,
-    media: string | MediaData,
-    uid?: string,
+    id?: ViewID,
+    media: MediaID | MediaData,
+    uid?: UserID,
     season?: number,
     episode?: number,
     page?: number,
@@ -30,20 +45,16 @@ export interface ViewData {
 }
 
 export interface MediaList {
-    id?: string,
+    id?: MediaListID,
     name: string,
-    creator: string,
-    editors: string[],
-    viewers: string[],
+    creator: UserID,
+    editors: UserID[],
+    viewers: UserID[],
     public: boolean,
-    created?: Date,
-    updated?: Date,
-}
-
-export interface MediaListEntry {
-    id?: string,
-    media: string | MediaData,
-    list: string | MediaList,
+    media: MediaID[],
+    expand: {
+        media: MediaData[],
+    },
     created?: Date,
     updated?: Date,
 }

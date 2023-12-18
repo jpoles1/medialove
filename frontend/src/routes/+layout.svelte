@@ -15,6 +15,7 @@
     {#if !$uaccount}
       <NavItem text="Login" currentUrl={$page.url} path="/login" class="flex items-center" />
     {:else}
+      <NavItem text="Media Lists" currentUrl={$page.url} path="/lists" class="flex items-center" />
       <NavItem text="Logout" currentUrl={$page.url} path="/logout" class="flex items-center" />
     {/if}
   </nav>

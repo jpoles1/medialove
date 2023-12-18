@@ -84,7 +84,7 @@
                 {#if value.author_name}
                     <span class="italic text-sm">{value.author_name.join(", ")}</span>
                 {/if}
-                <span class="text-sm">Score {value.ratings_average || "?"}/5</span><span class="italic text-xs">({value.ratings_count || 0} votes)</span>
+                <span class="text-sm">Audience Score {value.ratings_average || "?"}/5</span><span class="italic text-xs">({value.ratings_count || 0} votes)</span>
             </a>
         </div>
     {/each}

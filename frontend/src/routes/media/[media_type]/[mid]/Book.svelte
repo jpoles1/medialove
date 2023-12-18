@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { debounce } from "$lib/debounce";
+	import AddToList from "$lib/AddToList.svelte";
+import { debounce } from "$lib/debounce";
 	import { pb, uaccount, type ViewData } from "$lib/pocketbase";
 	import { toast } from "@zerodevx/svelte-toast";
 	import { Button, NumberStepper, Switch, Tab, Tabs } from "svelte-ux";
@@ -45,6 +46,7 @@
             <img src="/placeholder.png"/>
         {/if}
     </div>
+    <hr/>
     <div class="mt-2">
         <div class="flex items-center space-x-2">
             <span>Page:</span>
@@ -54,7 +56,11 @@
             Read
         </label>
     </div>
-
+    <hr/>
+    <div>
+        <AddToList mdbid={mdbid} />
+    </div>
+    <hr/>
     <p class="my-2">
         <b>Overview:</b>
         <br>
