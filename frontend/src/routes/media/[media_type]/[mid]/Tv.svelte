@@ -1,4 +1,5 @@
 <script lang="ts">
+	import AddToList from "$lib/AddToList.svelte";
 	import { debounce } from "$lib/debounce";
 	import { pb, uaccount, type ViewData } from "$lib/pocketbase";
 	import { toast } from "@zerodevx/svelte-toast";
@@ -72,10 +73,18 @@
 
     <img src="https://image.tmdb.org/t/p/w200/{series_data.poster_path}" onerror="this.onerror=null;this.src='/placeholder.png';" class="mt-2 rounded-lg"/>
     
+    <hr>
+    
     <label class="flex gap-2 items-center text-sm my-2">
         <Switch checked={ep_viewed(-1, -1)} on:change={(e) => {view_update_debounce(-1, -1, e.target.checked)}} />
         Watched
     </label>
+    
+    <hr/>
+    <div>
+        <AddToList mdbid={mdbid} />
+    </div>
+    <hr/>
 
     <p class="my-2">
         <b>Overview:</b>
