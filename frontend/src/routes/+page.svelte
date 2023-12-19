@@ -22,7 +22,7 @@
             media_type: search_media_type,
             page,
         }
-        fetch("/api/search", { method: "POST", body: JSON.stringify(request_body), headers: { "Content-Type": "application/json" } })
+        fetch(`${window.location.protocol}//${window.location.host}/api/search`, { method: "POST", body: JSON.stringify(request_body), headers: { "Content-Type": "application/json" } })
             .then(async (res) => { 
                 search_result = await res.json()
                 max_pages = search_result.total_pages || 1
