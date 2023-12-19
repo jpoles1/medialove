@@ -9,6 +9,7 @@ export type UserID = string
 export type MediaID = string
 export type MediaListID = string
 export type ViewID = string
+export type MediaFileID = string
 
 export interface UserData {
     id?: UserID,
@@ -55,6 +56,15 @@ export interface MediaList {
     expand: {
         media: MediaData[],
     },
+    created?: Date,
+    updated?: Date,
+}
+
+export interface MediaFile {
+    id?: MediaFileID,
+    user: UserID,
+    media: MediaID,
+    file: string,
     created?: Date,
     updated?: Date,
 }

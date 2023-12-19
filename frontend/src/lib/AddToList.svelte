@@ -71,7 +71,7 @@
             if (!new_list_record) return
             media_lists.push(new_list_record)
         }
-        add_lists.push()
+        selected_list = 0;
     })
     // Lists to which the current media is already added
     $: current_lists = media_lists.filter((l: MediaList) => l.media.includes(mdbid))
@@ -80,10 +80,10 @@
 </script>
 
 <div class="flex">
-    <SelectField label="Add to list" options={add_lists} bind:value={selected_list} />
+    <SelectField label="Add to list" options={add_lists} bind:value={selected_list} placeholder="Add New list" />
     <Button on:click={add_to_list} variant="fill">+</Button>
 </div>
-
+{#if current_lists.length > 0}
 <div class="mt-2">
     <b>Current Lists:</b>
     <div class="flex">
@@ -95,3 +95,4 @@
         {/each}
     </div>
 </div>
+{/if}

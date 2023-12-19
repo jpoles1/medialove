@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AddToList from "$lib/AddToList.svelte";
+	import BookViewer from "$lib/BookViewer.svelte";
 import { debounce } from "$lib/debounce";
 	import { pb, uaccount, type ViewData } from "$lib/pocketbase";
 	import { toast } from "@zerodevx/svelte-toast";
@@ -35,6 +36,8 @@ import { debounce } from "$lib/debounce";
 
     let book_data = media_data.book_data
     let show_synopsis = false;
+
+    $: page = view_data && view_data[0] ? view_data[0].page : 0
 </script>
 
 <div class="p-2">
@@ -50,7 +53,7 @@ import { debounce } from "$lib/debounce";
     <div class="mt-2">
         <div class="flex items-center space-x-2">
             <span>Page:</span>
-            <NumberStepper class="w-32" min={0} max={book_data.number_of_pages*20} value={view_data && view_data[0] ? view_data[0].page : 0} on:change={(e) => {view_update_debounce(view_data && view_data[0] ? view_data[0].viewed : false, e.detail.value)}} /></div>
+            <NumberStepper class="w-32" min={0} max={book_data.number_of_pages*20} value={page} on:change={(e) => {view_update_debounce(view_data && view_data[0] ? view_data[0].viewed : false, e.detail.value)}} /></div>
         <label class="flex gap-2 items-center text-sm my-2">
             <Switch checked={view_data && view_data[0] ? view_data[0].viewed : false} on:change={(e) => {view_update_debounce(e.target.checked, view_data && view_data[0] ? view_data[0].page || 0 : 0)}} />
             Read
@@ -72,3 +75,8 @@ import { debounce } from "$lib/debounce";
         {/if}
     </p>
 </div>
+
+<hr> 
+<b>Ebook Reader:</b>
+<br>
+<BookViewer {mdbid} {page} on:change="{(e) => view_update_debounce(view_data && view_data[0] ? view_data[0].viewed : false, e.detail.page)}"/>
